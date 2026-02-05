@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Auto-Deploy Network</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding-top: 50px; }
+        .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { background: #0070f3; color: white; border: none; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2 style="color: #0070f3; text-align: center;">🚀 Deploy Alat</h2>
+        <input type="text" id="ip" value="192.168.88.1" placeholder="IP MikroTik">
+        <select id="brand">
+            <option value="MikroTik">MikroTik</option>
+            <option value="ZTE">ZTE ONT</option>
+        </select>
+        <input type="text" id="user" placeholder="PPPoE User">
+        <input type="password" id="pass" placeholder="PPPoE Pass">
+        <button onclick="deploy()">Kirim Sekarang</button>
+        <p id="msg" style="text-align: center; font-weight: bold;"></p>
+    </div>
+    <script>
+        async function deploy() {
+            const msg = document.getElementById('msg');
+            msg.innerText = "Sabar, lagi ngirim...";
+            const data = {
+                deviceIp: document.getElementById('ip').value,
+                brand: document.getElementById('brand').value,
+                pppoeUser: document.getElementById('user').value,
+                pppoePass: document.getElementById('pass').value
+            };
+            const res = await fetch('/api/deploy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            if(res.ok) msg.innerText = "✅ Berhasil! Cek Agent di Laptop.";
+            else msg.innerText = "❌ Gagal Simpan.";
+        }
+    </script>
+</body>
+</html>
